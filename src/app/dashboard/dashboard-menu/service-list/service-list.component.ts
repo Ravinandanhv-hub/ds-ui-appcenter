@@ -19,6 +19,7 @@ export class ServiceListComponent implements OnInit {
   pinnedDs: Array<any>;
   activeId: string;
   prefId: string;
+  isDsSelect:boolean;
   preference: any;
   searchText: string;
   @Input() dsType: string;
@@ -31,6 +32,7 @@ export class ServiceListComponent implements OnInit {
     this.subscriptions = {};
     this.records = [];
     this.pinnedDs = [];
+    this.isDsSelect=false;
   }
 
   ngOnInit(): void {
@@ -50,6 +52,12 @@ export class ServiceListComponent implements OnInit {
     const segments = url.split('/');
     if (segments.length > 2) {
       this.activeId = segments[3];
+      if(segments[2]=='services'){
+        this.isDsSelect=true;
+      }
+      else{
+        this.isDsSelect=false;
+      }
     }
   }
 
@@ -143,6 +151,7 @@ export class ServiceListComponent implements OnInit {
   }
 
   loadDataService(service: any, force?: boolean) {
+    this.isDsSelect=false;
     this.appService.serviceId = service?._id;
     this.dashboardService.selectedService.emit(service);
     if (!this.activeId || force) {

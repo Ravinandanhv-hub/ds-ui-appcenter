@@ -1,3 +1,4 @@
+import { is } from '@amcharts/amcharts4/core';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
@@ -18,6 +19,7 @@ export class WorkflowListComponent implements OnInit {
   records: Array<any>;
   activeId: string;
   searchText: string;
+  isWfSelect:boolean;
   serviceDocsCount: any;
   @Output() toggleWorkflow: EventEmitter<any> = new EventEmitter();
 
@@ -30,6 +32,7 @@ export class WorkflowListComponent implements OnInit {
     this.subscriptions = {};
     this.records = [];
     this.serviceDocsCount = {};
+    this.isWfSelect=false;
   }
 
   ngOnInit(): void {
@@ -61,6 +64,12 @@ export class WorkflowListComponent implements OnInit {
     const segments = url.split('/');
     if (segments.length > 3) {
       this.activeId = segments[3];
+      if(segments[2]=='workflow'){
+        this.isWfSelect=true;
+      }
+      else{
+        this.isWfSelect=false;
+      }
     }
   }
 
@@ -135,6 +144,7 @@ export class WorkflowListComponent implements OnInit {
   }
 
   loadWorkflow(workflow: any, force?: boolean) {
+    this.isWfSelect=false;
     if (force) {
       this.wfSercice.currentFilter = {};
       this.updateWorflowCount();
